@@ -14,6 +14,8 @@ import Q6Screen from './components/Q6Screen';
 import Q7Screen from './components/Q7Screen';
 import ThankYou from './components/ThankYou';
 import MySpace from './components/MySpace';
+import MySpace2 from './components/MySpace2';
+import MyFood from './components/MyFood';
 
 const Stack = createStackNavigator();
 
@@ -38,7 +40,9 @@ export default function App() {
         <Stack.Screen name="Q6Screen" component={Q6Screen} />
         <Stack.Screen name="Q7Screen" component={Q7Screen} />
         <Stack.Screen name="ThankYou" component={ThankYou} />
-        <Stack.Screen name="MySpace" component={MySpace} />
+        {/* <Stack.Screen name="MySpace" component={MySpace} /> */}
+        {/* <Stack.Screen name="MySpace2" component={MySpace2} /> */}
+        {/* <Stack.Screen name="MyFood" component={MyFood} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
-import { useNavigation } from '@react-navigation/native'; // Import navigation hook
+import { useNavigation } from '@react-navigation/native';
 
 const Q3Screen = () => {
   const [selectedLocation, setSelectedLocation] = useState('Bengal');
-  const navigation = useNavigation();  // Initialize navigation
+  const navigation = useNavigation();
 
-  // Handle navigation to the next screen
+  // Handle navigation to Q4Screen and pass selected location
   const handleNextScreen = () => {
-    navigation.navigate('Q4Screen');  // Replace 'NextScreen' with the actual next screen name
+    navigation.navigate('Q4Screen', { location: selectedLocation }); // Pass the selected location to Q4Screen
   };
 
   return (
@@ -38,7 +38,7 @@ const Q3Screen = () => {
         >
           <Picker.Item label="Bengal" value="Bengal" />
           <Picker.Item label="Delhi" value="Delhi" />
-          {/* Add more options as needed */}
+          <Picker.Item label="Bangalore" value="Bangalore" />
         </Picker>
         <TouchableOpacity onPress={handleNextScreen}>
           <Ionicons name="arrow-forward" size={24} color="white" style={styles.icon} />
@@ -50,7 +50,6 @@ const Q3Screen = () => {
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
