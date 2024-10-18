@@ -16,6 +16,7 @@ import ThankYou from './components/ThankYou';
 import MySpace from './components/MySpace';
 import MySpace2 from './components/MySpace2';
 import MyFood from './components/MyFood';
+import ExtendStay from './components/ExtendStay';
 
 const Stack = createStackNavigator();
 
@@ -28,7 +29,7 @@ export default function App() {
           headerShown: false, // This will hide the back arrow and screen name on all screens
         }}
       >
-        <Stack.Screen name="Onboarding" component={Onboarding} />
+        {/* <Stack.Screen name="Onboarding" component={Onboarding} />
         <Stack.Screen name="SignInScreen" component={SignInScreen} />
         <Stack.Screen name="SignUpScreen" component={SignUpScreen} />
         <Stack.Screen name="VerifiedScreen" component={VerifiedScreen} />
@@ -39,10 +40,11 @@ export default function App() {
         <Stack.Screen name="Q5Screen" component={Q5Screen} />
         <Stack.Screen name="Q6Screen" component={Q6Screen} />
         <Stack.Screen name="Q7Screen" component={Q7Screen} />
-        <Stack.Screen name="ThankYou" component={ThankYou} />
+        <Stack.Screen name="ThankYou" component={ThankYou} /> */}
         {/* <Stack.Screen name="MySpace" component={MySpace} /> */}
         {/* <Stack.Screen name="MySpace2" component={MySpace2} /> */}
         {/* <Stack.Screen name="MyFood" component={MyFood} /> */}
+        <Stack.Screen name="ExtendStay" component={ExtendStay}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';  // Import navigation hook
 
@@ -31,7 +31,7 @@ const Q2Screen = () => {
       <View style={styles.pickerWrapper}>
         <Picker
           selectedValue={selectedCollege}
-          style={styles.picker}
+          style={[styles.picker, Platform.OS === 'ios' && styles.pickerIOS]} // Adding specific styles for iOS
           onValueChange={(itemValue) => setSelectedCollege(itemValue)}
         >
           <Picker.Item label="Reva U" value="Reva U" />
@@ -47,7 +47,6 @@ const Q2Screen = () => {
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -107,8 +106,11 @@ const styles = StyleSheet.create({
   },
   picker: {
     flex: 1,
-    height: 50,
+    height: Platform.OS === 'ios' ? 20 : 10, // Adjust height specifically for iOS
     color: '#4A3AFF',
+  },
+  pickerIOS: {
+    height: 20 , // Ensures the iOS picker has enough height
   },
   arrowButton: {
     padding: 5, // Increase padding for larger button

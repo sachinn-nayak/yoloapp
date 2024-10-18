@@ -1,49 +1,70 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import React, { useState, useRef } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions, KeyboardAvoidingView, Platform, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-const SignUpScreen = () => {
-  const [otp, setOtp] = useState(["", "", "", ""]);
+const { width, height } = Dimensions.get('window');
+
+const SignUpScreen = ({ route }) => {
+  const [otp, setOtp] = useState(['', '', '', '']);
+  const otpRefs = useRef([]);
   const navigation = useNavigation();
-  const route = useRoute();
-  const { phoneNumber } = route.params || { phoneNumber: '' };
+  const { phoneNumber } = route.params;
 
-  const handleInputChange = (value, index) => {
-    let otpCopy = [...otp];
-    otpCopy[index] = value;
-    setOtp(otpCopy);
+  const handleOtpChange = (index, value) => {
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    // Move to next input box automatically if the value is entered
+    if (value && index < otpRefs.current.length - 1) {
+      otpRefs.current[index + 1].focus();
+    }
   };
 
-  const handleConfirm = () => {
-    const otpString = otp.join('');
-    console.log('Verifying OTP:', otpString, 'for phone:', phoneNumber);
-    
-    // Assuming OTP verification is successful
-    navigation.navigate('VerifiedScreen');
+  const handleContinue = () => {
+    const otpCode = otp.join('');
+    if (otpCode.length !== 4) {
+      alert('Please enter a valid 4-digit OTP');
+      return;
+    }
+    console.log('OTP Entered:', otpCode);
+    // Proceed further, e.g., navigating to the next screen
+    navigation.navigate('Q1Screen');
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Verification Code</Text>
-      <Text style={styles.subtitle}>We have sent the verification code to your phone number</Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <KeyboardAvoidingView
+          style={styles.keyboardAvoidingContainer}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 10}
+        >
+          <Text style={styles.title}>Enter the OTP sent to {'\n'}{phoneNumber}</Text>
 
-      <View style={styles.otpContainer}>
-        {otp.map((digit, index) => (
-          <TextInput
-            key={index}
-            style={styles.otpInput}
-            keyboardType="numeric"
-            maxLength={1}
-            value={digit}
-            onChangeText={(value) => handleInputChange(value, index)}
-          />
-        ))}
+          <View style={styles.otpContainer}>
+            {otp.map((digit, index) => (
+              <TextInput
+                key={index}
+                ref={(ref) => otpRefs.current[index] = ref}
+                style={styles.otpInput}
+                keyboardType="numeric"
+                maxLength={1}
+                value={digit}
+                onChangeText={(value) => handleOtpChange(index, value)}
+              />
+            ))}
+          </View>
+
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleContinue}
+          >
+            <Text style={styles.buttonText}>Verify</Text>
+          </TouchableOpacity>
+        </KeyboardAvoidingView>
       </View>
-
-      <TouchableOpacity style={styles.confirmButton} onPress={handleConfirm}>
-        <Text style={styles.confirmButtonText}>Confirm</Text>
-      </TouchableOpacity>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -52,60 +73,49 @@ export default SignUpScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    paddingHorizontal: 20,
-    paddingVertical: 40,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 20,
+    backgroundColor: '#fff',
   },
-  backArrow: {
-    position: 'absolute',
-    top: 30,
-    left: 20,
-  },
-  backText: {
-    fontSize: 54,
-    color: '#333',
+  keyboardAvoidingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
   },
   title: {
-    fontSize: 28,
+    fontSize: 25,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 30,
     color: '#000',
     textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#888',
-    marginBottom: 40,
-    textAlign: 'center',
-    paddingHorizontal: 20,
   },
   otpContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 30,
-    width: '80%', // Adjust width as per requirement
+    width: '80%',
+    marginBottom: 40,
   },
   otpInput: {
-    width: 60,
-    height: 60,
-    borderRadius: 10,
+    width: 50,
+    height: 50,
     borderWidth: 1,
     borderColor: '#ccc',
+    borderRadius: 10,
     textAlign: 'center',
-    fontSize: 24,
-    backgroundColor: '#F8F8F8',
+    fontSize: 22,
+    color: '#000',
   },
-  confirmButton: {
-    width: '80%',
+  button: {
+    width: '90%',
     backgroundColor: '#2E266E',
-    paddingVertical: 15,
+    padding: 15,
     borderRadius: 25,
     alignItems: 'center',
-    marginTop: 40,
+    marginTop: 20,
   },
-  confirmButtonText: {
+  buttonText: {
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',

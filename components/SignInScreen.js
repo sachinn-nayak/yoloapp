@@ -8,18 +8,28 @@ const SignInScreen = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const navigation = useNavigation();
 
+  const validatePhoneNumber = (number) => {
+    const phoneNumberPattern = /^[0-9]{10,}$/; // Regular expression to check if the phone number is at least 10 digits and contains only numbers
+    return phoneNumberPattern.test(number);
+  };
+
   const handleContinue = () => {
-    // Simple validation to check if phone number is entered
+    // Check if the phone number is entered and valid
     if (!phoneNumber) {
       alert('Please enter your phone number');
+      return;
+    }
+    
+    if (!validatePhoneNumber(phoneNumber)) {
+      alert('Please enter a valid phone number with at least 10 digits');
       return;
     }
 
     // Simulate sending OTP here. In a real app, you'd make an API call.
     console.log('Sending OTP to:', phoneNumber);
     
-    // Navigate to SignUpScreen where user will enter OTP
-    navigation.navigate('SignUpScreen', { phoneNumber }); 
+    // Navigate to SignUpScreen where the user will enter OTP
+    navigation.navigate('SignUpScreen', { phoneNumber });
   };
 
   return (
@@ -39,6 +49,7 @@ const SignInScreen = () => {
               placeholder="Phone no"
               placeholderTextColor="#888"
               keyboardType="numeric"
+              maxLength={15} // Limiting to 15 characters (e.g., country codes can be included)
               value={phoneNumber}
               onChangeText={setPhoneNumber}
             />
@@ -63,6 +74,7 @@ const SignInScreen = () => {
 };
 
 export default SignInScreen;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -75,7 +87,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    width: '100%',  // Make sure container takes the full width
+    width: '100%',
   },
   title: {
     fontSize: 39,
@@ -91,28 +103,28 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   inputContainer: {
-    width: '100%',  // Ensure the container takes the full width
-    paddingHorizontal: 20,  // Add padding to the sides for spacing
+    width: '100%',
+    paddingHorizontal: 20,
   },
   input: {
-    width: '100%',  // Make sure the input takes the full width of its container
-    height: 60,     // Increase height for a larger input field
+    width: '100%',
+    height: 60,
     padding: 15,
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 20,
-    fontSize: 18,   // Larger font size for easier input
+    fontSize: 18,
     marginBottom: 20,
     color: '#000',
   },
   button: {
-    width: '90%',  // Make sure the button takes full width
-    backgroundColor: '#2E266E',  // Dark purple color
+    width: '90%',
+    backgroundColor: '#2E266E',
     padding: 20,
     borderRadius: 25,
     alignItems: 'center',
     marginTop: 7,
-    marginBottom: 180,  // Adjusted to leave space between the button and the ellipses
+    marginBottom: 180,
   },
   buttonText: {
     color: '#fff',
@@ -121,16 +133,16 @@ const styles = StyleSheet.create({
   },
   ellipseContainer: {
     position: 'absolute',
-    bottom: -7,  // Fix ellipses to the bottom of the screen
+    bottom: -7,
     width: '100%',
-    height: height * 0.1,  // Make sure ellipses take up only 30% of screen height
-    zIndex: -5,  // Ensure ellipses are in the background
+    height: height * 0.1,
+    zIndex: -5,
   },
   bigEllipse: {
     width: 180,
     height: 180,
     borderRadius: 90,
-    backgroundColor: '#2E78B7',  // Blue color for the big ellipse
+    backgroundColor: '#2E78B7',
     position: 'absolute',
     bottom: -30,
     left: -60,
@@ -139,7 +151,7 @@ const styles = StyleSheet.create({
     width: 90,
     height: 90,
     borderRadius: 45,
-    backgroundColor: '#FF4081',  // Pink color
+    backgroundColor: '#FF4081',
     position: 'absolute',
     bottom: 140,
     left: 80,
@@ -148,7 +160,7 @@ const styles = StyleSheet.create({
     width: 45,
     height: 45,
     borderRadius: 22.5,
-    backgroundColor: '#3F2D7E',  // Dark purple color
+    backgroundColor: '#3F2D7E',
     position: 'absolute',
     bottom: 80,
     left: 150,

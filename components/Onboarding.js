@@ -63,11 +63,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    width: 120,  // Adjust as per logo size
-    height: 60,
+    width: 130,  // Adjust as per logo size
+    height: 65,
     resizeMode: 'contain',
     position: 'absolute',
-    top: 50,
+    top: 40,
     left: 20,  // Positioning logo to top-left
   },
   personImage: {
