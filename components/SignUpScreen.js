@@ -29,7 +29,7 @@ const SignUpScreen = ({ route }) => {
     }
     console.log('OTP Entered:', otpCode);
     // Proceed further, e.g., navigating to the next screen
-    navigation.navigate('Q1Screen');
+    navigation.navigate('TermsAndConditionsScreen');
   };
 
   return (
@@ -40,8 +40,7 @@ const SignUpScreen = ({ route }) => {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 10}
         >
-          <Text style={styles.title}>Enter the OTP sent to {'\n'}{phoneNumber}</Text>
-
+          <Text style={styles.title}>Verification Code</Text>
           <View style={styles.otpContainer}>
             {otp.map((digit, index) => (
               <TextInput
@@ -60,7 +59,7 @@ const SignUpScreen = ({ route }) => {
             style={styles.button}
             onPress={handleContinue}
           >
-            <Text style={styles.buttonText}>Verify</Text>
+            <Text style={styles.buttonText}>Confirm</Text>
           </TouchableOpacity>
         </KeyboardAvoidingView>
       </View>

@@ -1,35 +1,94 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, SafeAreaView } from 'react-native';
-import { RadioButton } from 'react-native-paper'; 
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, SafeAreaView, Image, Alert } from 'react-native';
+import { RadioButton } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation for navigation
 
 const ExtendStay = () => {
   const [checked, setChecked] = useState('UPI');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const navigation = useNavigation(); // Initialize navigation
+
+  // Function to format date as DD/MM/YYYY
+  const handleDateInput = (text, setDate, currentDate) => {
+    let formattedText = text.replace(/\D/g, ''); // Remove all non-digit characters
+  
+    // Handle backspace scenario: If input is less than the previous state, adjust
+    if (currentDate.length > text.length) {
+      // Backspace handling
+      if (currentDate.endsWith('/')) {
+        formattedText = formattedText.slice(0, -1); // Remove the last digit if backspace after a `/`
+      }
+    }
+  
+    if (formattedText.length >= 2 && formattedText.length < 4) {
+      formattedText = `${formattedText.slice(0, 2)}/${formattedText.slice(2)}`;
+    } else if (formattedText.length >= 4) {
+      formattedText = `${formattedText.slice(0, 2)}/${formattedText.slice(2, 4)}/${formattedText.slice(4, 8)}`;
+    }
+  
+    setDate(formattedText);
+  };
+
+  // Date validation function
+  const isValidDate = (date) => {
+    const regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+    return regex.test(date);
+  };
+
+  // Function to handle Pay Now button click
+  const handlePayNow = () => {
+    if (!isValidDate(startDate) || !isValidDate(endDate)) {
+      Alert.alert('Invalid Date', 'Please enter valid dates in DD/MM/YYYY format.');
+      return;
+    }
+
+    const start = new Date(startDate.split('/').reverse().join('-'));
+    const end = new Date(endDate.split('/').reverse().join('-'));
+
+    if (start >= end) {
+      Alert.alert('Invalid Date Range', 'The end date must be after the start date.');
+      return;
+    }
+
+    // Navigate to ConfirmScreen upon successful validation
+    navigation.navigate('ConfirmScreen'); // Ensure 'ConfirmScreen' exists in your navigation stack
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton}>
-          <Text style={styles.backButtonText}>←</Text>  
+        <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('MyPlan')}>
+          <Text style={styles.backButtonText}>←</Text>
         </TouchableOpacity>
-        <Text style={styles.logoText}>Your Logo</Text>
+        <Image
+          style={styles.logo}
+          source={require('../assets/images/logo.png')} // Adjust the path to match your actual image location
+        />
       </View>
-
       <Text style={styles.title}>Extend Stay</Text>
-
       <Text style={styles.sectionLabel}>To extend your stay</Text>
       <Text style={styles.sectionSubLabel}>Please Select the start and end dates</Text>
-      
+
       <View style={styles.dateInputContainer}>
         <TextInput
           style={styles.dateInput}
           placeholder="DD/MM/YYYY"
           placeholderTextColor="#B5B5B5"
+          keyboardType="numeric"
+          maxLength={10}
+          value={startDate}
+          onChangeText={(text) => handleDateInput(text, setStartDate, startDate)}
         />
         <Text style={styles.toText}>To</Text>
         <TextInput
           style={styles.dateInput}
           placeholder="DD/MM/YYYY"
           placeholderTextColor="#B5B5B5"
+          keyboardType="numeric"
+          maxLength={10}
+          value={endDate}
+          onChangeText={(text) => handleDateInput(text, setEndDate, endDate)}
         />
       </View>
 
@@ -64,13 +123,14 @@ const ExtendStay = () => {
 
       <Text style={styles.preferredLabel}>Preferred</Text>
       <View style={styles.paymentMethod}>
-        <SvgUri
-          width="40"
-          height="40"
-          source={require('../assets/images/google-pay-icon.png')} // Path to your SVG file
-        />
-        <Text style={styles.preferredLabel}>Google Pay</Text>
-        <TouchableOpacity style={styles.payButton}>
+        <View style={styles.paymentMethodLeft}>
+          <Image
+            style={styles.paymentIcon}
+            source={require('../assets/images/google-pay-icon.png')} // Replace with your actual image path
+          />
+          <Text style={styles.preferredLabel}>Google Pay</Text>
+        </View>
+        <TouchableOpacity style={styles.payButton} onPress={handlePayNow}>
           <Text style={styles.payButtonText}>Pay Now</Text>
         </TouchableOpacity>
       </View>
@@ -103,35 +163,38 @@ const styles = StyleSheet.create({
   backButton: {
     marginRight: 15,
     padding: 5,
+    bottom: -25,
   },
   backButtonText: {
-    fontSize: 30,
+    fontSize: 40,
     fontWeight: 'bold',
   },
-  logoText: {
-    fontSize: 24,
-    fontWeight: 'bold',
+  logo: {
+    width: 100,
+    height: 40,
+    resizeMode: 'contain',
+    bottom: -30,
   },
   title: {
-    fontSize: 24,
+    fontSize: 35,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 30,
   },
   sectionLabel: {
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
   },
   sectionSubLabel: {
-    fontSize: 12,
+    fontSize: 17,
     color: '#666',
-    marginBottom: 10,
+    marginBottom: 13,
   },
   dateInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 20,
+    marginBottom: 28,
   },
   dateInput: {
     borderWidth: 1,
@@ -146,7 +209,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   paymentLabel: {
-    fontSize: 18,
+    fontSize: 19,
     fontWeight: 'bold',
     marginBottom: 10,
   },
@@ -163,15 +226,25 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   preferredLabel: {
-    fontSize: 16,
+    fontSize: 19,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 11,
+    bottom: -6,
   },
   paymentMethod: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 10,
+  },
+  paymentMethodLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  paymentIcon: {
+    width: 40,
+    height: 40,
+    marginRight: 10,
   },
   payButton: {
     backgroundColor: '#4A3AFF',
@@ -189,17 +262,20 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   summaryTitle: {
-    fontSize: 16,
+    fontSize: 19,
     fontWeight: 'bold',
     marginBottom: 10,
+    textAlign: 'center',
   },
   summaryContainer: {
     borderTopWidth: 1,
-    borderColor: '#E0E0E0',
+    borderTopColor: '#E0E0E0',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E0E0E0',
     paddingTop: 10,
   },
   summaryText: {
-    fontSize: 16,
+    fontSize: 19,
     marginBottom: 5,
   },
 });

@@ -1,215 +1,203 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { Entypo } from '@expo/vector-icons';
-
-// Importing local images
+import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import ProfileImage from '../assets/images/cute-cartoon-girl-cap-overalls-3d-rendering 1.png';
 import DosaImage from '../assets/images/delicious-indian-dosa-composition 1.png';
 import VegThaliImage from '../assets/images/indian-hindu-veg-thali-food-platter-selective-focus 1.png';
 import RotiRiceImage from '../assets/images/indian-delicious-roti-assortment 1.png';
 import YoloLogo from '../assets/images/logo.png'; // Logo image
 
-const ProfileScreen = () => {
+export default function MySpace() {
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {/* Header Section */}
+    <ScrollView style={styles.container}>
+      {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.time}>9:11</Text>
-        <Text style={styles.spaceText}>My Space</Text>
+        <Text style={styles.headerText}>MySpace</Text>
         <Image source={YoloLogo} style={styles.logo} />
       </View>
+
+      {/* Pink line */}
+      <View style={styles.pinkLine} />
 
       {/* Profile Section */}
       <View style={styles.profileSection}>
         <Image source={ProfileImage} style={styles.profileImage} />
-        <Text style={styles.name}>Jane Doe</Text>
-        <Text style={styles.university}>( Reva university )</Text>
-        <Text style={styles.phone}>PH no. 123 456 7890</Text>
-        <View style={styles.locationContainer}>
-          <Entypo name="location-pin" size={18} color="#FF4A4A" />
-          <Text style={styles.location}>location</Text>
+        <View style={styles.profileDetails}>
+          <Text style={styles.profileName}>Jane Doe</Text>
+          <Text style={styles.profileInfo}>( Reva university )</Text>
+          <Text style={styles.profileInfo}>PH no. 123 456 7890</Text>
+          <View style={styles.location}>
+            <Text style={styles.profileInfo}>location</Text>
+          </View>
         </View>
       </View>
 
-      {/* Edit Profile Button */}
-      <TouchableOpacity style={styles.editProfileButton}>
-        <Text style={styles.editProfileText}>Edit Profile</Text>
-      </TouchableOpacity>
-
-      {/* Living Space Section */}
-      <View style={styles.livingSpace}>
-        <Text style={styles.livingSpaceText}>Boy’s living space</Text>
-        <Text style={styles.livingSpaceText}>2 Sharing</Text>
-        <Text style={styles.livingSpaceText}>3rd Floor</Text>
-        <Text style={styles.livingSpaceText}>Room no 6</Text>
+      {/* Living Space Details */}
+      <View style={styles.spaceDetails}>
+        <Text style={styles.spaceButton}>Boy’s living space</Text>
+        <Text style={styles.spaceButton}>2 Sharing</Text>
+        <Text style={styles.spaceButton}>3rd Floor</Text>
+        <Text style={styles.spaceButton}>Room no 6</Text>
       </View>
 
       {/* Wi-Fi Details */}
-      <View style={styles.wifiSection}>
+      <View style={styles.wifiDetails}>
         <Text style={styles.wifiTitle}>Wi-Fi Details</Text>
-        <Text style={styles.wifiText}>Name : Yolo Living</Text>
-        <View style={styles.wifiDetail}>
-          <Text style={styles.wifiText}>Password : yolo living 123</Text>
-          <Entypo name="eye-with-line" size={18} color="#D9D9D9" />
+        <View style={styles.wifiRow}>
+          <Text style={styles.wifiText}>Name: Yolo Living</Text>
+        </View>
+        <View style={styles.wifiRow}>
+          <Text style={styles.wifiText}>Password: yolo living 123</Text>
         </View>
       </View>
 
       {/* Today's Menu */}
+      <Text style={styles.menuTitle}>Today's menu</Text>
       <View style={styles.menuSection}>
-        <Text style={styles.menuTitle}>Today's menu</Text>
-        {/* Menu Item 1 */}
         <View style={styles.menuItem}>
           <Image source={DosaImage} style={styles.menuImage} />
-          <Text style={styles.menuText}>Dosa</Text>
-          <Text style={styles.menuType}>Breakfast</Text>
+          <View style={styles.menuText}>
+            <Text style={styles.menuName}>Dosa</Text>
+            <Text style={styles.mealTime}>Breakfast</Text>
+          </View>
         </View>
-        {/* Menu Item 2 */}
+
         <View style={styles.menuItem}>
           <Image source={VegThaliImage} style={styles.menuImage} />
-          <Text style={styles.menuText}>Veg Thali</Text>
-          <Text style={styles.menuType}>Lunch</Text>
+          <View style={styles.menuText}>
+            <Text style={styles.menuName}>Veg Thali</Text>
+            <Text style={styles.mealTime}>Lunch</Text>
+          </View>
         </View>
-        {/* Menu Item 3 */}
+
         <View style={styles.menuItem}>
           <Image source={RotiRiceImage} style={styles.menuImage} />
-          <Text style={styles.menuText}>Roti and Rice</Text>
-          <Text style={styles.menuType}>Dinner</Text>
+          <View style={styles.menuText}>
+            <Text style={styles.menuName}>Roti and Rice</Text>
+            <Text style={styles.mealTime}>Dinner</Text>
+          </View>
         </View>
       </View>
     </ScrollView>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    backgroundColor: '#6E57E0',
-    padding: 20,
-    paddingBottom: 50,
+    flex: 1,
+    backgroundColor: '#6F57D2',
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
+    paddingHorizontal: 20,
+    paddingTop: 30,
   },
-  time: {
-    color: '#FFF',
-    fontSize: 16,
-  },
-  spaceText: {
-    color: '#FFF',
+  headerText: {
+    color: '#fff',
     fontSize: 24,
     fontWeight: 'bold',
   },
   logo: {
-    width: 50,
+    width: 200,
     height: 50,
+    bottom:-10,
+  },
+  pinkLine: {
+    backgroundColor: '#FF6B83', // Pink color
+    height: 3,
+    marginTop: 10,
+    marginHorizontal: 20,
   },
   profileSection: {
+    flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
+    marginVertical: 20,
+    paddingHorizontal: 20,
   },
   profileImage: {
     width: 80,
     height: 80,
     borderRadius: 40,
-    marginBottom: 10,
   },
-  name: {
+  profileDetails: {
+    marginLeft: 20,
+  },
+  profileName: {
+    color: '#fff',
     fontSize: 22,
-    color: '#FFF',
     fontWeight: 'bold',
   },
-  university: {
-    fontSize: 16,
-    color: '#D9D9D9',
-  },
-  phone: {
-    fontSize: 16,
-    color: '#D9D9D9',
-  },
-  locationContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 5,
+  profileInfo: {
+    color: '#E1D4F9',
+    fontSize: 14,
   },
   location: {
-    fontSize: 16,
-    color: '#FFF',
-  },
-  editProfileButton: {
-    backgroundColor: '#3B308E',
-    padding: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginVertical: 15,
-  },
-  editProfileText: {
-    color: '#FFF',
-    fontSize: 16,
-  },
-  livingSpace: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    flexWrap: 'wrap',
-    marginVertical: 10,
-  },
-  livingSpaceText: {
-    backgroundColor: '#897EF9',
-    padding: 10,
-    color: '#FFF',
-    borderRadius: 8,
-    marginBottom: 5,
-    flexGrow: 1,
-    textAlign: 'center',
-    marginHorizontal: 5,
-  },
-  wifiSection: {
-    marginVertical: 20,
-  },
-  wifiTitle: {
-    fontSize: 18,
-    color: '#E24B5A',
-    marginBottom: 10,
-  },
-  wifiText: {
-    color: '#FFF',
-    fontSize: 16,
-  },
-  wifiDetail: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 5,
   },
-  menuSection: {
+  spaceDetails: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     marginVertical: 20,
+    paddingHorizontal: 20,
+  },
+  spaceButton: {
+    backgroundColor: '#9A84D1',
+    padding: 10,
+    borderRadius: 10,
+    color: '#fff',
+    fontSize: 14,
+  },
+  wifiDetails: {
+    paddingHorizontal: 20,
+  },
+  wifiTitle: {
+    color: '#FF6B83',
+    fontSize: 16,
+    marginVertical: 10,
+  },
+  wifiRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  wifiText: {
+    color: '#E1D4F9',
+    fontSize: 14,
   },
   menuTitle: {
+    color: '#68C8FF',
     fontSize: 18,
-    color: '#61A0FF',
-    marginBottom: 10,
+    marginVertical: 10,
+    paddingHorizontal: 20,
+  },
+  menuSection: {
+    paddingHorizontal: 20,
   },
   menuItem: {
     flexDirection: 'row',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 10,
+    padding: 10,
+    marginVertical: 5,
     alignItems: 'center',
-    marginBottom: 10,
   },
   menuImage: {
     width: 60,
     height: 60,
-    borderRadius: 8,
-    marginRight: 10,
+    borderRadius: 10,
   },
   menuText: {
-    fontSize: 18,
-    color: '#FFF',
-    flex: 1,
+    marginLeft: 10,
   },
-  menuType: {
+  menuName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  mealTime: {
     fontSize: 14,
-    color: '#D9D9D9',
+    color: '#8E8E8E',
   },
 });
-
-export default ProfileScreen;
