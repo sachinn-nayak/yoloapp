@@ -1,53 +1,164 @@
-import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  TextInput,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
 
+const colleges = [
+  'Indian Institute of Science, Bengaluru',
+  'Indian Institute of Management, Bengaluru',
+  'National Institute of Fashion Technology, Bengaluru',
+  'Bangalore Institute of Technology',
+  'R.V. College of Engineering',
+  'B.M.S. College of Engineering',
+  'Vivekananda Institute of Technology',
+  'Karnataka College of Management',
+  'Christ University',
+  'Manipal University',
+  'M.S. Ramaiah Institute of Technology',
+  'Nitte Meenakshi Institute of Technology',
+  // Add more colleges as needed
+];
+
 const Q3Screen = () => {
-  const [selectedLocation, setSelectedLocation] = useState('Bengal');
+  const [searchText, setSearchText] = useState('');
+  const [filteredColleges, setFilteredColleges] = useState([]);
+  const [selectedCollege, setSelectedCollege] = useState('');
+  const [keyboardVisible, setKeyboardVisible] = useState(false); // Track keyboard visibility
   const navigation = useNavigation();
 
-  // Handle navigation to Q4Screen and pass selected location
+  useEffect(() => {
+    // Add keyboard event listeners
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardVisible(true);
+    });
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardVisible(false);
+    });
+
+    // Cleanup listeners
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
   const handleNextScreen = () => {
-    navigation.navigate('Q4Screen', { location: selectedLocation }); // Pass the selected location to Q4Screen
+    if (selectedCollege) {
+      navigation.navigate('Q4Screen', { college: selectedCollege });
+      Keyboard.dismiss();
+    } else {
+      alert('Please select a college');
+    }
+  };
+
+  const handleSearch = (text) => {
+    setSearchText(text);
+    if (text.length > 0) {
+      const filtered = colleges.filter((college) =>
+        college.toLowerCase().includes(text.toLowerCase())
+      );
+      setFilteredColleges(filtered);
+    } else {
+      setFilteredColleges([]);
+    }
+  };
+
+  const handleSelectCollege = (college) => {
+    setSelectedCollege(college);
+    setSearchText(college);
+    setFilteredColleges([]);
+    Keyboard.dismiss();
   };
 
   return (
-    <View style={styles.container}>
-      {/* Pink and blue ellipses */}
-      <View style={styles.ellipseContainer}>
-        <View style={styles.pinkEllipse}></View>
-        <View style={styles.blueEllipse}></View>
-      </View>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.inner}>
+          {/* Pink and blue ellipses */}
+          <View
+            style={[
+              styles.ellipseContainer,
+              keyboardVisible && { top: 10 ,left:10}, // Adjust position when keyboard is visible
+            ]}
+          >
+            <View style={styles.pinkEllipse}></View>
+            <View style={styles.blueEllipse}></View>
+          </View>
 
-      {/* Image container for Vidhana Soudha */}
-      <View style={styles.imageContainer}>
-        <Image source={require('../assets/images/vidhana-soudha-bangalore 1.png')} style={styles.image} />
-      </View>
+          {/* Image container for Vidhana Soudha */}
+          <View
+            style={[
+              styles.imageContainer,
+              keyboardVisible && { top: 70 }, // Adjust image position
+            ]}
+          >
+            <Image
+              source={require('../assets/images/vidhana-soudha-bangalore 1.png')}
+              style={styles.image}
+            />
+          </View>
 
-      {/* Question label */}
-      <Text style={styles.textLabel}>Where are you from?</Text>
+          {/* Question label */}
+          <Text
+            style={[
+              styles.textLabel,
+              keyboardVisible && { marginTop: 350 }, // Adjust question label position
+            ]}
+          >
+            Which college are you from?
+          </Text>
 
-      {/* Picker with icon */}
-      <View style={styles.pickerContainer}>
-        <Picker
-          selectedValue={selectedLocation}
-          style={styles.picker}
-          onValueChange={(itemValue) => setSelectedLocation(itemValue)}
-        >
-          <Picker.Item label="Bengal" value="Bengal" />
-          <Picker.Item label="Delhi" value="Delhi" />
-          <Picker.Item label="Bangalore" value="Bangalore" />
-        </Picker>
-        <TouchableOpacity onPress={handleNextScreen}>
-          <Ionicons name="arrow-forward" size={24} color="white" style={styles.icon} />
-        </TouchableOpacity>
-      </View>
+          {/* Search bar */}
+          <View style={styles.searchContainer}>
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search your college"
+              placeholderTextColor="white"
+              value={searchText}
+              onChangeText={handleSearch}
+            />
+            <TouchableOpacity onPress={handleNextScreen}>
+              <Ionicons name="arrow-forward" size={24} color="white" style={styles.icon} />
+            </TouchableOpacity>
+          </View>
 
-      {/* Location text */}
-      <Text style={styles.locationText}>Bengaluru, Karnataka 560</Text>
-    </View>
+          {/* Filtered colleges list */}
+          {filteredColleges.length > 0 && (
+            <FlatList
+              data={filteredColleges}
+              keyExtractor={(item) => item}
+              renderItem={({ item }) => (
+                <TouchableOpacity
+                  style={[
+                    styles.locationItem,
+                    item === selectedCollege && styles.selectedLocationItem,
+                  ]}
+                  onPress={() => handleSelectCollege(item)}
+                >
+                  <Text style={styles.locationText}>{item}</Text>
+                </TouchableOpacity>
+              )}
+              style={styles.locationList}
+            />
+          )}
+        </View>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -55,13 +166,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  inner: {
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    padding: 30,
   },
   ellipseContainer: {
     position: 'absolute',
-    top: 50,
+    top: 60,
     left: 0,
     right: 0,
     alignItems: 'center',
@@ -73,8 +187,8 @@ const styles = StyleSheet.create({
     height: 100,
     backgroundColor: '#E149A0',
     borderRadius: 50,
-    top: 60,
-    left: 70,
+    top: 30,
+    left: 50,
   },
   blueEllipse: {
     position: 'absolute',
@@ -82,19 +196,19 @@ const styles = StyleSheet.create({
     height: 40,
     backgroundColor: '#4193E1',
     borderRadius: 20,
-    top: 400,
-    right: 330,
+    top: 300,
+    right: 350,
   },
   imageContainer: {
     position: 'absolute',
-    top: 160,
+    top: 200,
     right: -30,
     width: 300,
     height: 300,
     borderRadius: 200,
     overflow: 'hidden',
-    borderWidth: 8, // Adds the border thickness
-    borderColor: '#F9C646', // Color similar to the image's border color
+    borderWidth: 8,
+    borderColor: '#F9C646',
   },
   image: {
     width: '100%',
@@ -103,31 +217,43 @@ const styles = StyleSheet.create({
   textLabel: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 20,
-    marginTop: 300, // Increases margin to push label down
+    marginBottom: 16,
+    marginTop: 500,
   },
-  pickerContainer: {
+  searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#3E278D',
     borderRadius: 10,
-    paddingHorizontal: 0,
-    paddingVertical: 5,
+    paddingHorizontal: 10,
     marginBottom: 20,
-    width: 200,
+    width: '80%',
   },
-  picker: {
+  searchInput: {
+    flex: 1,
     height: 50,
-    width: 150,
     color: 'white',
   },
   icon: {
     marginLeft: 10,
   },
+  locationList: {
+    width: '80%',
+    maxHeight: 160,
+    marginBottom: 18,
+    top:-25,
+  },
+  locationItem: {
+    paddingVertical: 11,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  selectedLocationItem: {
+    backgroundColor: '#E6E6FA',
+  },
   locationText: {
     fontSize: 16,
-    color: '#333',
-    marginTop: 10, // Increases margin to push location text down
+    color: 'blue',
   },
 });
 

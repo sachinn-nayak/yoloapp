@@ -1,13 +1,28 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';  // Import navigation hook
+import React, { useState } from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity, TextInput, FlatList } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+
+const languages = ['English', 'Hindi', 'Spanish',  'Kannada','French', 'German', 'Chinese', 'Japanese', 'Russian', 'Arabic']; // Sample language list
 
 const Q4Screen = () => {
-  const navigation = useNavigation();  // Initialize navigation
+  const [query, setQuery] = useState(''); // Input state for typing languages
+  const [filteredLanguages, setFilteredLanguages] = useState(languages); // Filtered languages list
+  const navigation = useNavigation(); // Navigation hook
 
-  // Function to handle navigation to Q5Screen
-  const navigateToQ5Screen = () => {
-    navigation.navigate('Q5Screen');  // Replace 'Q5Screen' with the actual name of the next screen
+  // Function to handle filtering languages based on user input
+  const handleInputChange = (text) => {
+    setQuery(text);
+    setFilteredLanguages(
+      languages.filter((language) =>
+        language.toLowerCase().includes(text.toLowerCase())
+      )
+    );
+  };
+
+  // Function to handle language selection and navigate to the next screen
+  const handleLanguageSelect = (language) => {
+    setQuery(language); // Set selected language to input
+    navigation.navigate('Q5Screen'); // Navigate to the next screen
   };
 
   return (
@@ -18,26 +33,50 @@ const Q4Screen = () => {
 
       {/* Food images */}
       <View style={styles.imageContainerTopRight}>
-        <Image source={require('../assets/images/indian-delicious-food-view.png')} style={styles.foodImage} />
+        <Image
+          source={require('../assets/images/indian-delicious-food-view.png')}
+          style={styles.foodImage}
+        />
       </View>
       <View style={styles.imageContainerBottomLeft}>
-        <Image source={require('../assets/images/healthy-meal-with-beef-rice-vegetables-generated-by-ai.png')} style={styles.foodImage} />
+        <Image
+          source={require('../assets/images/healthy-meal-with-beef-rice-vegetables-generated-by-ai.png')}
+          style={styles.foodImage}
+        />
       </View>
 
       {/* Question label */}
       <Text style={styles.textLabel}>Your Food Preference?</Text>
 
+      {/* Text input for language */}
+      <TextInput
+        style={styles.input}
+        placeholder="Type your language..."
+        value={query}
+        onChangeText={handleInputChange}
+      />
+
+      {/* Display filtered language list */}
+      <FlatList
+        data={filteredLanguages}
+        keyExtractor={(item) => item}
+        renderItem={({ item }) => (
+          <TouchableOpacity style={styles.languageItem} onPress={() => handleLanguageSelect(item)}>
+            <Text style={styles.languageText}>{item}</Text>
+          </TouchableOpacity>
+        )}
+      />
+
       {/* Buttons for food choices */}
-      <TouchableOpacity style={styles.button} onPress={navigateToQ5Screen}>
+      <TouchableOpacity style={styles.button} onPress={() => handleLanguageSelect('Veg')}>
         <Text style={styles.buttonText}>Veg</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={navigateToQ5Screen}>
+      <TouchableOpacity style={styles.button} onPress={() => handleLanguageSelect('Non-veg')}>
         <Text style={styles.buttonText}>Non-veg</Text>
       </TouchableOpacity>
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -71,7 +110,7 @@ const styles = StyleSheet.create({
     width: 280,
     height: 280,
     borderRadius: 140, // Circle shape
-    overflow: 'hidden', // Ensure the image stays within the border 
+    overflow: 'hidden', // Ensure the image stays within the border
   },
   imageContainerBottomLeft: {
     position: 'absolute',
@@ -92,6 +131,26 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: 500, // Adjusted for better alignment
     marginBottom: 20,
+  },
+  input: {
+    width: '80%',
+    padding: 10,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 20,
+  },
+  languageItem: {
+    padding: 10,
+    backgroundColor: '#F5F5F5',
+    width: '80%',
+    alignItems: 'center',
+    borderRadius: 5,
+    marginVertical: 5,
+  },
+  languageText: {
+    fontSize: 18,
+    color: '#333',
   },
   button: {
     backgroundColor: '#3E278D',

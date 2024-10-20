@@ -1,119 +1,133 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons'; // For the eye icon
 import ProfileImage from '../assets/images/cute-cartoon-girl-cap-overalls-3d-rendering 1.png';
 import DosaImage from '../assets/images/delicious-indian-dosa-composition 1.png';
 import VegThaliImage from '../assets/images/indian-hindu-veg-thali-food-platter-selective-focus 1.png';
 import RotiRiceImage from '../assets/images/indian-delicious-roti-assortment 1.png';
-import YoloLogo from '../assets/images/logo.png'; // Logo image
+import YoloLogo from '../assets/images/Logo white.png';
 
-export default function MySpace() {
+const MySpaceScreen = () => {
+  const [showWifi, setShowWifi] = useState(false);
+
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerText}>MySpace</Text>
-        <Image source={YoloLogo} style={styles.logo} />
+        <Text style={styles.headerText}>My Space</Text>
+        <Image source={YoloLogo} style={styles.logo} resizeMode="contain" />
       </View>
 
-      {/* Pink line */}
+      {/* Pink Line */}
       <View style={styles.pinkLine} />
 
       {/* Profile Section */}
-      <View style={styles.profileSection}>
+      <View style={styles.profileContainer}>
         <Image source={ProfileImage} style={styles.profileImage} />
         <View style={styles.profileDetails}>
           <Text style={styles.profileName}>Jane Doe</Text>
           <Text style={styles.profileInfo}>( Reva university )</Text>
           <Text style={styles.profileInfo}>PH no. 123 456 7890</Text>
-          <View style={styles.location}>
-            <Text style={styles.profileInfo}>location</Text>
-          </View>
+          <Text style={styles.profileLocation}>📍 location</Text>
         </View>
       </View>
+      {/* Edit Profile Button */}
+      <TouchableOpacity style={styles.editButton}>
+        <Text style={styles.editButtonText}>Edit Profile</Text>
+      </TouchableOpacity>
 
-      {/* Living Space Details */}
-      <View style={styles.spaceDetails}>
-        <Text style={styles.spaceButton}>Boy’s living space</Text>
-        <Text style={styles.spaceButton}>2 Sharing</Text>
-        <Text style={styles.spaceButton}>3rd Floor</Text>
-        <Text style={styles.spaceButton}>Room no 6</Text>
+      {/* Room Details */}
+      <View style={styles.roomDetails}>
+        <Text style={styles.roomDetailText}>Boy's living space</Text>
+        <Text style={styles.roomDetailText}>2 Sharing</Text>
+         </View>
+        <View style={styles.roomDetails}>
+        <Text style={styles.roomDetailText}>3rd Floor</Text>
+        <Text style={styles.roomDetailText}>Room no 6</Text>
       </View>
 
       {/* Wi-Fi Details */}
-      <View style={styles.wifiDetails}>
-        <Text style={styles.wifiTitle}>Wi-Fi Details</Text>
+      <View style={styles.wifiContainer}>
+        <Text style={styles.wifiHeader}>Wi-Fi Details</Text>
         <View style={styles.wifiRow}>
-          <Text style={styles.wifiText}>Name: Yolo Living</Text>
+          <Text style={styles.wifiInfo}>Name: {showWifi ? 'Yolo Living' : '••••••••'}</Text>
+          <TouchableOpacity onPress={() => setShowWifi(!showWifi)}>
+            <MaterialIcons name={showWifi ? 'visibility-off' : 'visibility'} size={24} color="white" />
+          </TouchableOpacity>
         </View>
         <View style={styles.wifiRow}>
-          <Text style={styles.wifiText}>Password: yolo living 123</Text>
+          <Text style={styles.wifiInfo}>Password: {showWifi ? 'yolo living 123' : '••••••••'}</Text>
+          <TouchableOpacity onPress={() => setShowWifi(!showWifi)}>
+            <MaterialIcons name={showWifi ? 'visibility-off' : 'visibility'} size={24} color="white" />
+          </TouchableOpacity>
         </View>
       </View>
+  {/* Menu Section */}
+  <View style={styles.menuSection}>
+        <Text style={styles.menuHeader}>Today's menu</Text>
 
-      {/* Today's Menu */}
-      <Text style={styles.menuTitle}>Today's menu</Text>
-      <View style={styles.menuSection}>
-        <View style={styles.menuItem}>
+        {/* Breakfast */}
+        <View style={styles.menuItemBox}>
           <Image source={DosaImage} style={styles.menuImage} />
-          <View style={styles.menuText}>
-            <Text style={styles.menuName}>Dosa</Text>
-            <Text style={styles.mealTime}>Breakfast</Text>
+          <View style={styles.menuDetails}>
+            <Text style={styles.menuText}>Dosa</Text>
+            <Text style={styles.menuSubText}>Breakfast</Text>
           </View>
         </View>
 
-        <View style={styles.menuItem}>
+        {/* Lunch */}
+        <View style={styles.menuItemBox}>
           <Image source={VegThaliImage} style={styles.menuImage} />
-          <View style={styles.menuText}>
-            <Text style={styles.menuName}>Veg Thali</Text>
-            <Text style={styles.mealTime}>Lunch</Text>
+          <View style={styles.menuDetails}>
+            <Text style={styles.menuText}>Veg Thali</Text>
+            <Text style={styles.menuSubText}>Lunch</Text>
           </View>
         </View>
 
-        <View style={styles.menuItem}>
+        {/* Dinner */}
+        <View style={styles.menuItemBox}>
           <Image source={RotiRiceImage} style={styles.menuImage} />
-          <View style={styles.menuText}>
-            <Text style={styles.menuName}>Roti and Rice</Text>
-            <Text style={styles.mealTime}>Dinner</Text>
+          <View style={styles.menuDetails}>
+            <Text style={styles.menuText}>Roti and Rice</Text>
+            <Text style={styles.menuSubText}>Dinner</Text>
           </View>
         </View>
       </View>
     </ScrollView>
   );
-}
-
+};
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#6F57D2',
+    flexGrow: 1,
+    backgroundColor: '#432C83',
+    padding: 20,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 30,
+    marginBottom: 10,
   },
   headerText: {
-    color: '#fff',
-    fontSize: 24,
+    color: 'white',
+    fontSize: 28,
     fontWeight: 'bold',
+    top:28,
   },
   logo: {
-    width: 200,
-    height: 50,
-    bottom:-10,
+    width: 80, // Adjusted width for better visibility
+    height: 40,
+    top:30, // Adjusted height for better visibility
   },
   pinkLine: {
-    backgroundColor: '#FF6B83', // Pink color
     height: 3,
-    marginTop: 10,
-    marginHorizontal: 20,
+    backgroundColor: '#F72585',
+    marginVertical: 15,
   },
-  profileSection: {
+  profileContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 20,
-    paddingHorizontal: 20,
+    marginBottom: 20,
   },
   profileImage: {
     width: 80,
@@ -121,83 +135,116 @@ const styles = StyleSheet.create({
     borderRadius: 40,
   },
   profileDetails: {
-    marginLeft: 20,
+    marginLeft: 15,
   },
   profileName: {
-    color: '#fff',
-    fontSize: 22,
+    color: 'white',
+    fontSize: 24,
     fontWeight: 'bold',
   },
   profileInfo: {
-    color: '#E1D4F9',
-    fontSize: 14,
+    color: 'white',
+    fontSize: 16,
   },
-  location: {
+  profileLocation: {
+    color: '#E94560',
+    fontSize: 16,
+  },
+  editButton: {
+    backgroundColor: '#341F97',
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    borderRadius: 20,
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
+  editButtonText: {
+    color: 'white',
+    fontSize: 18,
+  },
+  roomDetails: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 5,
+    justifyContent: 'space-between',
+    marginBottom: 10,
   },
-  spaceDetails: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginVertical: 20,
-    paddingHorizontal: 20,
-  },
-  spaceButton: {
-    backgroundColor: '#9A84D1',
+  roomDetailText: {
+    color: '#DCC7FF',
+    backgroundColor: '#5A3EBC',
     padding: 10,
     borderRadius: 10,
-    color: '#fff',
-    fontSize: 14,
+    textAlign: 'center',
+    flex: 1,
+    margin: 5,
   },
-  wifiDetails: {
-    paddingHorizontal: 20,
+  wifiContainer: {
+    backgroundColor: '#5A3EBC',
+    padding: 20,
+    borderRadius: 15,
+    marginBottom: 20,
   },
-  wifiTitle: {
-    color: '#FF6B83',
-    fontSize: 16,
-    marginVertical: 10,
+  wifiHeader: {
+    color: '#F72585',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
   },
   wifiRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginTop: 10,
   },
-  wifiText: {
-    color: '#E1D4F9',
-    fontSize: 14,
-  },
-  menuTitle: {
-    color: '#68C8FF',
-    fontSize: 18,
-    marginVertical: 10,
-    paddingHorizontal: 20,
+  wifiInfo: {
+    color: 'white',
+    fontSize: 16,
   },
   menuSection: {
-    paddingHorizontal: 20,
+    marginTop: 20,
   },
-  menuItem: {
-    flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    padding: 10,
-    marginVertical: 5,
-    alignItems: 'center',
+  menuHeader: {
+    color: '#3498DB',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  menuSection: {
+    marginTop: 20,
+  },
+  menuHeader: {
+    color: '#3498DB',
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  menuItemBox: {
+    backgroundColor: '#FDF6E3', // Background color for the item box
+    borderRadius: 15, // Rounded corners
+    padding: 10, // Padding inside the box
+    marginBottom: 12, // Space between boxes
+    flexDirection: 'row', // Align image and text in a row
+    alignItems: 'center', // Center align items vertically
   },
   menuImage: {
-    width: 60,
-    height: 60,
+    width: 70, // Adjusted width for better layout
+    height: 70, // Adjusted height for better layout
     borderRadius: 10,
   },
+  menuDetails: {
+    marginLeft: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   menuText: {
-    marginLeft: 10,
-  },
-  menuName: {
-    fontSize: 16,
+    color: 'black',
+    fontSize: 18,
     fontWeight: 'bold',
+    marginRight: 10,
   },
-  mealTime: {
-    fontSize: 14,
-    color: '#8E8E8E',
+  menuSubText: {
+    color: 'black',
+    fontSize: 16,
+    left:40,
   },
 });
+
+export default MySpaceScreen;

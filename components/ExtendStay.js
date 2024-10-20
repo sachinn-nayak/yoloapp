@@ -1,32 +1,30 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, SafeAreaView, Image, Alert } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, SafeAreaView, Image, Alert, Platform } from 'react-native';
 import { RadioButton } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native'; // Import useNavigation for navigation
+import { useNavigation } from '@react-navigation/native';
 
 const ExtendStay = () => {
   const [checked, setChecked] = useState('UPI');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const navigation = useNavigation(); // Initialize navigation
+  const navigation = useNavigation();
 
   // Function to format date as DD/MM/YYYY
   const handleDateInput = (text, setDate, currentDate) => {
-    let formattedText = text.replace(/\D/g, ''); // Remove all non-digit characters
-  
-    // Handle backspace scenario: If input is less than the previous state, adjust
+    let formattedText = text.replace(/\D/g, '');
+
     if (currentDate.length > text.length) {
-      // Backspace handling
       if (currentDate.endsWith('/')) {
-        formattedText = formattedText.slice(0, -1); // Remove the last digit if backspace after a `/`
+        formattedText = formattedText.slice(0, -1);
       }
     }
-  
+
     if (formattedText.length >= 2 && formattedText.length < 4) {
       formattedText = `${formattedText.slice(0, 2)}/${formattedText.slice(2)}`;
     } else if (formattedText.length >= 4) {
       formattedText = `${formattedText.slice(0, 2)}/${formattedText.slice(2, 4)}/${formattedText.slice(4, 8)}`;
     }
-  
+
     setDate(formattedText);
   };
 
@@ -51,8 +49,7 @@ const ExtendStay = () => {
       return;
     }
 
-    // Navigate to ConfirmScreen upon successful validation
-    navigation.navigate('ConfirmScreen'); // Ensure 'ConfirmScreen' exists in your navigation stack
+    navigation.navigate('ConfirmScreen');
   };
 
   return (
@@ -63,7 +60,7 @@ const ExtendStay = () => {
         </TouchableOpacity>
         <Image
           style={styles.logo}
-          source={require('../assets/images/logo.png')} // Adjust the path to match your actual image location
+          source={require('../assets/images/logo.png')}
         />
       </View>
       <Text style={styles.title}>Extend Stay</Text>
@@ -100,6 +97,9 @@ const ExtendStay = () => {
             value="Card"
             status={checked === 'Card' ? 'checked' : 'unchecked'}
             onPress={() => setChecked('Card')}
+            color="#4A3AFF" // Change color to make it visible
+            uncheckedColor="#B5B5B5" // Ensure unchecked color is distinct
+            style={styles.radioButton} // Add styles here
           />
           <Text style={styles.radioText}>Card</Text>
         </View>
@@ -108,6 +108,9 @@ const ExtendStay = () => {
             value="Bank"
             status={checked === 'Bank' ? 'checked' : 'unchecked'}
             onPress={() => setChecked('Bank')}
+            color="#4A3AFF"
+            uncheckedColor="#B5B5B5"
+            style={styles.radioButton}
           />
           <Text style={styles.radioText}>Bank</Text>
         </View>
@@ -116,6 +119,9 @@ const ExtendStay = () => {
             value="UPI"
             status={checked === 'UPI' ? 'checked' : 'unchecked'}
             onPress={() => setChecked('UPI')}
+            color="#4A3AFF"
+            uncheckedColor="#B5B5B5"
+            style={styles.radioButton}
           />
           <Text style={styles.radioText}>UPI</Text>
         </View>
@@ -126,7 +132,7 @@ const ExtendStay = () => {
         <View style={styles.paymentMethodLeft}>
           <Image
             style={styles.paymentIcon}
-            source={require('../assets/images/google-pay-icon.png')} // Replace with your actual image path
+            source={require('../assets/images/google-pay-icon.png')}
           />
           <Text style={styles.preferredLabel}>Google Pay</Text>
         </View>
@@ -152,7 +158,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingHorizontal: 20,
+    paddingHorizontal: Platform.OS === 'ios' ? 20 : 10,
   },
   header: {
     flexDirection: 'row',
@@ -242,14 +248,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   paymentIcon: {
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
     marginRight: 10,
   },
   payButton: {
     backgroundColor: '#4A3AFF',
-    paddingHorizontal: 20,
     paddingVertical: 10,
+    paddingHorizontal: 15,
     borderRadius: 5,
   },
   payButtonText: {
@@ -257,27 +263,28 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   noteText: {
-    fontSize: 12,
-    color: '#888',
-    marginBottom: 20,
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
+    marginVertical: 10,
   },
   summaryTitle: {
-    fontSize: 19,
+    fontSize: 20,
     fontWeight: 'bold',
+    marginTop: 20,
     marginBottom: 10,
-    textAlign: 'center',
   },
   summaryContainer: {
-    borderTopWidth: 1,
-    borderTopColor: '#E0E0E0',
-    borderBottomWidth: 1,
-    borderBottomColor: '#E0E0E0',
-    paddingTop: 10,
+    borderWidth: 1,
+    borderColor: '#E0E0E0',
+    borderRadius: 5,
+    padding: 10,
+    marginVertical: 10,
   },
   summaryText: {
-    fontSize: 19,
-    marginBottom: 5,
+    fontSize: 16,
   },
 });
 
 export default ExtendStay;
+                              

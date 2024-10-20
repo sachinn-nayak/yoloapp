@@ -38,17 +38,17 @@ export default function App() {
         <Stack.Screen name="VerifiedScreen" component={VerifiedScreen} />
         <Stack.Screen name="Q1Screen" component={Q1Screen} />
         <Stack.Screen name="Q2Screen" component={Q2Screen} />
-        <Stack.Screen name="Q3Screen" component={Q3Screen} />
+        <Stack.Screen name="Q3Screen" component={Q3Screen} /> */}
         <Stack.Screen name="Q4Screen" component={Q4Screen} />
-        <Stack.Screen name="Q5Screen" component={Q5Screen} />
+        {/* <Stack.Screen name="Q5Screen" component={Q5Screen} />
         <Stack.Screen name="Q6Screen" component={Q6Screen} />
         <Stack.Screen name="Q7Screen" component={Q7Screen} />
-        <Stack.Screen name="ThankYou" component={ThankYou} />  */}
+        <Stack.Screen name="ThankYou" component={ThankYou} /> 
         <Stack.Screen name="MySpace" component={MySpace} />
         <Stack.Screen name="MySpace2" component={MySpace2} />
         <Stack.Screen name="MyFood" component={MyFood} />
         <Stack.Screen name="ExtendStay" component={ExtendStay}/>
-        <Stack.Screen name="ConfirmScreen" component={ConfirmScreen}/>
+        <Stack.Screen name="ConfirmScreen" component={ConfirmScreen}/> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
